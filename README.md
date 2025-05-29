@@ -41,88 +41,105 @@ __________________________________
 
 # Features App ✨
 ____________________________________
+## ✨ Features App
 
-1. Worker Registration
-    Workers can register with:
-    -Full Name
-    -Email
-    -Password (min 6 characters)
-    -Phone Number
-    -Address
-    The data is sent to a PHP backend through a secured HTTP POST.
+1. **Worker Registration**  
+   Workers can register with:
+   - Full Name  
+   - Email  
+   - Password (min 6 characters)  
+   - Phone Number  
+   - Address  
+   The data is sent to a PHP backend through a secured HTTP POST.
 
-2. Worker Login
-    -Employees input their password and email.
-    -Worker info is sent to the Profile screen upon success.
-    -For security, passwords are SHA1 hashed in the backend.
+2. **Worker Login**  
+   Employees input their password and email.  
+   - Worker info is sent to the Profile screen upon success.  
+   - For security, passwords are SHA1 hashed in the backend.
 
-3. Profile sreen
-    Show full worker information including:
-    -Worker ID
-    -Full Name
-    -Email
-    -Phone Number
-    -Address
-    -ALso includes buttons for My Tasks and Logout.
+3. **Profile Screen**  
+   Shows full worker information including:  
+   - Worker ID  
+   - Full Name  
+   - Email  
+   - Phone Number  
+   - Address  
+   Also includes buttons for **My Tasks** and **Logout**.
 
-4.  Assigned task screen
-    All of the task assigned to the logged-in worker are listed on this screen (based on assigned_to ID).
+4. **Assigned Task Screen**  
+   Displays all tasks assigned to the logged-in worker.
 
-    Every card displays:
-    -Title
-    -An explanation
-    -Date of Due
-    -Color-coded status badges: Pending, Completed, and Overdue
+   Each task card displays:
+   - Title  
+   - Explanation  
+   - Due Date  
+   - Color-coded badges: **Pending**, **Completed**, **Overdue**
 
-5. Submit work screen
-    -Any pending task can be tapped by worker to bring up the submission screen.
-    -"What did you complete?" is a text area that the user need fills out.
-    
-    After submission:
-    -Tbl_submissions is where the data is stored.-App updates on the status of the task to be complete.
-    -The user is returned to the most recent task list.
+5. **Submit Work Screen**  
+   Any pending task can be tapped to submit work.
 
+   - Workers fill out a text area: _"What did you complete?"_
+   - After submission, data is stored in `tbl_submissions`
+   - App auto-updates the task status to **Completed**
+   - User is returned to the updated task list
 
 
  # Screens Overview 🖼️
 _____________________________
+## 📱 App Screens Overview
 
-📄 Registration Screen
-    -Fields: Name, Email, Password, Phone, Address
-    -Validations: Required fields, valid email, min 6-char password
+### 📄 Registration Screen
+- **Fields:** Name, Email, Password, Phone, Address  
+- **Validations:** Required fields, valid email format, minimum 6-character password  
+- **Backend:** Sends data securely to PHP backend via HTTP POST
 
-🔐 Login Screen
-    -Fields: Email, Password
-    -Success: Redirects to profile with full data
+### 🔐 Login Screen
+- **Fields:** Email, Password  
+- **Process:** On success, redirects to Profile Screen with full user data  
 
-👤 Profile Screen
-    -Shows user data
-    -Buttons: My Tasks, Logout
+### 👤 Profile Screen
+- **Displays:** Full user details (ID, Name, Email, Phone, Address)  
+- **Actions:** Buttons for:
+  - 🗂️ *My Tasks*  
+  - 🚪 *Logout*
 
-📋 Task List
-    -Shows only tasks assigned to the worker
-    -Color-coded status labels
-    -Tap to submit work
+### 📋 Task List Screen
+- **Displays:** Tasks assigned to the logged-in worker only  
+- **Card Contents:**  
+  - Title  
+  - Description  
+  - Due Date  
+  - **Color-coded status:**  
+    - 🟡 Pending  
+    - ✅ Completed  
+    - 🔴 Overdue  
+- **Action:** Tap a task to open the submission form
 
-✍️ Submit Work
-    -Prefilled task title and description
-    -Text field for completion note
-    -Submit button with validation
+### ✍️ Submit Work Screen
+- **Prefilled Info:** Task title and description  
+- **Input Field:** Completion note from worker  
+- **Validation:** Ensures field is not empty  
+- **After Submission:**  
+  - Saves data to `tbl_submissions`  
+  - Updates task status to **Completed**  
+  - Returns to latest task list
 
-🔒 Secure Authentication
-    Password hashes are saved in the database with SHA1.
+###  Secure Authentication 🔒
+- **Passwords:** SHA1-hashed before storing in database  
+- **Data:** Sent securely to backend via HTTP POST
 
-# Link ✨
-__________________________
+---
 
-GitHub Link
-    https://github.com/wnzimah/wtms-project.git
 
-YOUTUBE LINK 
+##  Project Links 🔗
 
-    Phase 1 : 
-    https://youtu.be/AoQuPAxQTx8?si=Up9A6HgSSvS5k2by
+### GitHub Repository  
+   [wtms-project (GitHub)](https://github.com/wnzimah/wtms-project.git)
 
-    Phase 2 ,Task Completion System:
-    https://youtu.be/1qvjaIUDGUI?si=y641ccvB0BTC1A5O
-    
+### YouTube Demonstration
+
+- **Phase 1 – User Registration & Login**  
+    (https://youtu.be/AoQuPAxQTx8?si=Up9A6HgSSvS5k2by)
+
+- **Phase 2 – Task Completion System**  
+    (https://youtu.be/1qvjaIUDGUI?si=y641ccvB0BTC1A5O)
