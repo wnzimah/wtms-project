@@ -1,4 +1,3 @@
-# wtms
 
 # Worker Task Management System (WTMS)
 _____________________________________________________
@@ -41,7 +40,6 @@ __________________________________
 
 # Features App ✨
 ____________________________________
-## ✨ Features App
 
 1. **Worker Registration**  
    Workers can register with:
@@ -86,24 +84,23 @@ ____________________________________
 
  # Screens Overview 🖼️
 _____________________________
-## 📱 App Screens Overview
 
-### 📄 Registration Screen
+### Registration Screen
 - **Fields:** Name, Email, Password, Phone, Address  
 - **Validations:** Required fields, valid email format, minimum 6-character password  
 - **Backend:** Sends data securely to PHP backend via HTTP POST
 
-### 🔐 Login Screen
+###  Login Screen
 - **Fields:** Email, Password  
 - **Process:** On success, redirects to Profile Screen with full user data  
 
-### 👤 Profile Screen
+###  Profile Screen
 - **Displays:** Full user details (ID, Name, Email, Phone, Address)  
 - **Actions:** Buttons for:
   - 🗂️ *My Tasks*  
   - 🚪 *Logout*
 
-### 📋 Task List Screen
+### Task List Screen
 - **Displays:** Tasks assigned to the logged-in worker only  
 - **Card Contents:**  
   - Title  
@@ -115,7 +112,7 @@ _____________________________
     - 🔴 Overdue  
 - **Action:** Tap a task to open the submission form
 
-### ✍️ Submit Work Screen
+### Submit Work Screen
 - **Prefilled Info:** Task title and description  
 - **Input Field:** Completion note from worker  
 - **Validation:** Ensures field is not empty  
@@ -124,7 +121,7 @@ _____________________________
   - Updates task status to **Completed**  
   - Returns to latest task list
 
-###  Secure Authentication 🔒
+### Secure Authentication 
 - **Passwords:** SHA1-hashed before storing in database  
 - **Data:** Sent securely to backend via HTTP POST
 
