@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/worker.dart';
 import 'loginscreen.dart';
+import 'TaskListScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final Worker worker;
@@ -20,15 +21,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color themeColor = Color(0xFF8E0038); // Maroon
-    const Color backgroundColor = Color(0xFFF5F7FA);
+    const Color themeColor = Color(0xFF8E0038); // Maroon utama
+    const Color backgroundColor = Color(0xFFFFF0F2); // ✅ Light Rose
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text("Worker Profile"),
         backgroundColor: themeColor,
-        // Logout button at top removed
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "My Profile",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -41,37 +50,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   const CircleAvatar(
-                    radius: 50,
+                    radius: 45,
                     backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, size: 60, color: Colors.white),
+                    child: Icon(Icons.person, size: 50, color: Colors.white),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Text(
                     widget.worker.workerName ?? "No Name",
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: themeColor,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   _buildProfileItem(Icons.badge, "Worker ID", widget.worker.workerId ?? "-"),
                   _buildProfileItem(Icons.email, "Email", widget.worker.workerEmail ?? "-"),
                   _buildProfileItem(Icons.phone, "Phone", widget.worker.workerPhone ?? "-"),
                   _buildProfileItem(Icons.location_on, "Address", widget.worker.workerAddress ?? "-"),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 24),
 
-                  // Styled Logout Button at bottom
+                  // My Tasks button
                   SizedBox(
-                    width: 180,
-                    height: 45,
+                    width: 160,
+                    height: 40,
                     child: ElevatedButton.icon(
-                      onPressed: _logout,
-                      icon: const Icon(Icons.logout, color: Colors.white),
-                      label: const Text("Logout", style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => TaskListScreen(worker: widget.worker),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.task_alt, color: Colors.white, size: 18),
+                      label: const Text("My Tasks", style: TextStyle(color: Colors.white, fontSize: 13)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: themeColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        elevation: 4,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Logout button
+                  SizedBox(
+                    width: 160,
+                    height: 40,
+                    child: ElevatedButton.icon(
+                      onPressed: _logout,
+                      icon: const Icon(Icons.logout, color: Colors.white, size: 18),
+                      label: const Text("Logout", style: TextStyle(color: Colors.white, fontSize: 13)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: themeColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                         elevation: 5,
                         shadowColor: Colors.black45,
@@ -88,20 +123,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildProfileItem(IconData icon, String title, String value) {
+    const Color iconColor = Color(0xFF8E0038);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xFF8E0038)),
-          const SizedBox(width: 12),
+          Icon(icon, color: iconColor, size: 18),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
                 const SizedBox(height: 2),
-                Text(value, style: const TextStyle(fontSize: 16)),
+                Text(value, style: const TextStyle(fontSize: 13)),
               ],
             ),
           )

@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen> {
           );
         }
       }).catchError((error) {
-        // If HTTP error, go to LoginScreen
+        // this for if HTTP error, go to LoginScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),
