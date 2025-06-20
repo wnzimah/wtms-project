@@ -124,4 +124,7 @@ ____________________________________
 
 ### GitHub Repository  
    [wtms-project (GitHub)](https://github.com/wnzimah/wtms-project.git)
+   [LAB 2 ASSIGMENT YOUTUBE] (https://www.youtube.com/watch?v=AoQuPAxQTx8)
+   [MIDTERM ASSIGMENT YOUTUBE] (https://www.youtube.com/watch?v=1qvjaIUDGUI)
+   [FINAL ASSIGMENT YOUTUBE] (https://youtu.be/GFx-iY3f0Os?si=QRUuaofjOdP7xZck)
 
