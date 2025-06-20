@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wtms/model/worker.dart';
-import 'package:wtms/myconfig.dart';
-import 'package:wtms/view/profilescreen.dart';
 import 'package:http/http.dart' as http;
-import 'package:wtms/view/loginscreen.dart';
+import '../model/worker.dart';
+import '../myconfig.dart';
+import 'loginscreen.dart';
+import 'mainscreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,11 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(255, 247, 249, 249),
-              Color.fromARGB(255, 227, 84, 146),
-             
-            ],
+            colors: [Color(0xFFF7F9F9), Color(0xFFE35492)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -40,11 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                "assets/images/wtms.png",
-                width: 500,
-                height: 300,
-              ),
+              Image.asset("assets/images/wtms.png", width: 500, height: 300),
               const SizedBox(height: 20),
               const CircularProgressIndicator(
                 backgroundColor: Colors.white,
@@ -58,7 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> loadWorkerCredentials() async {
-    // so delay splash screen for 3 seconds
     await Future.delayed(const Duration(seconds: 3));
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,47 +58,29 @@ class _SplashScreenState extends State<SplashScreen> {
     bool remember = prefs.getBool('remember') ?? false;
 
     if (remember && email.isNotEmpty && password.isNotEmpty) {
-      http.post(
-        Uri.parse("${MyConfig.myurl}/wtms_api/login_worker.php"),
-        body: {
-          "email": email,
-          "password": password,
-        },
-      ).then((response) {
+      try {
+        var response = await http.post(
+          Uri.parse("${MyConfig.myurl}/wtms/wtms/php/login_worker.php"),
+          body: {"email": email, "password": password},
+        );
+
         if (response.statusCode == 200) {
           var jsondata = json.decode(response.body);
           if (jsondata['status'] == 'success') {
-            var data = jsondata['data'];
-            Worker worker = Worker.fromJson(data);
-
+            Worker worker = Worker.fromJson(jsondata['data'][0]);
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ProfileScreen(worker: worker)),
+              MaterialPageRoute(builder: (_) => MainScreen(worker: worker)),
             );
-          } else {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
+            return;
           }
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
         }
-      }).catchError((error) {
-        // this for if HTTP error, go to LoginScreen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-        );
-      });
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      } catch (_) {}
     }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
   }
 }

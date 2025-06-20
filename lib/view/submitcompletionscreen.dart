@@ -8,7 +8,12 @@ import '../myconfig.dart';
 class SubmitCompletionScreen extends StatefulWidget {
   final Worker worker;
   final Work work;
-  const SubmitCompletionScreen({super.key, required this.worker, required this.work});
+
+  const SubmitCompletionScreen({
+    super.key,
+    required this.worker,
+    required this.work,
+  });
 
   @override
   State<SubmitCompletionScreen> createState() => _SubmitCompletionScreenState();
@@ -64,6 +69,8 @@ class _SubmitCompletionScreenState extends State<SubmitCompletionScreen> {
     const Color themeColor = Color(0xFF8E0038); // Maroon
     const Color backgroundColor = Color(0xFFFFF0F2); // Light rose
 
+    bool isCompleted = widget.work.status.toUpperCase() == 'COMPLETED';
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -78,93 +85,108 @@ class _SubmitCompletionScreenState extends State<SubmitCompletionScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  )
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Task Details",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  const Divider(),
-                  const SizedBox(height: 6),
-                  Text(
-                    widget.work.title,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    widget.work.description,
-                    style: const TextStyle(fontSize: 13, color: Colors.black54),
-                  ),
-                ],
+            // ==== Task Title ====
+            Text(
+              widget.work.title,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
-                  )
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "What did you complete?",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _submissionController,
-                    maxLines: 6,
-                    decoration: InputDecoration(
-                      hintText: "Describe your completed work...",
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(height: 6),
+            Text(
+              widget.work.description,
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
             ),
-            const SizedBox(height: 28),
-            SizedBox(
+            const SizedBox(height: 20),
+
+            // ==== Section Box ====
+            Container(
               width: double.infinity,
-              height: 46,
-              child: ElevatedButton.icon(
-                onPressed: _isSubmitting ? null : _submitWork,
-                icon: const Icon(Icons.send, color: Colors.white),
-                label: Text(
-                  _isSubmitting ? "Submitting..." : "Submit",
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: themeColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                  elevation: 4,
-                ),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  )
+                ],
               ),
+              child: isCompleted
+                  ? Column(
+                      children: const [
+                        Icon(Icons.check_circle_outline, color: Colors.green, size: 40),
+                        SizedBox(height: 12),
+                        Text(
+                          "This task has already been completed.",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 6),
+                        Text(
+                          "You cannot submit again.",
+                          style: TextStyle(color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "What did you complete?",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _submissionController,
+                          maxLines: 6,
+                          decoration: InputDecoration(
+                            hintText: "Describe your completed work...",
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.all(14),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 46,
+                          child: ElevatedButton.icon(
+                            onPressed: _isSubmitting ? null : _submitWork,
+                            icon: const Icon(Icons.send, color: Colors.white),
+                            label: Text(
+                              _isSubmitting ? "Submitting..." : "Submit",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: themeColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              elevation: 4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
             ),
           ],
         ),

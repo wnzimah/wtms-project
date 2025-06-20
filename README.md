@@ -14,18 +14,29 @@ MATRIC NUMBER:297976
  # Project Description:
  _____________________________
 
-    -A task management and profile app for employees is called WTMS (Worker Task Management System). Through a simple and responsive Flutter interface, it enables worker members to register or log in, examine tasks that have been allocated to them, and submit work completion reports. 
+    - A task‑management and profile app for employees called **WTMS (Worker Task Management System)**.  
+   Through a simple and responsive **Flutter interface**, it enables workers to:  
+   - Register or log in  
+   - View tasks assigned to them  
+   - Submit work‑completion reports  
+   - View & edit previous submissions  
+   - Update their profile  
 
-    -The app would connect to a backend API made in PHP with a database in MySQL.
+   - The app connects to a **backend API built in PHP**, with a **MySQL** database to store all data securely.
+
 
 
 # Getting Started by:
 ________________________________
 
     1.Download this repository or clone it.
-    2.Create the necessary workers table and configure your MySQL database.
+    2.Import the provided wtms.sql file to create workers, tbl_works, and tbl_submissions tables (with sample data).
     3.Modify the Flutter configuration (config.dart) and PHP files to correspond with your local server configuration.
     4.Use a hardware device or an emulator to run the Flutter project.
+    ```bash
+      cd flutter
+      flutter pub get
+      flutter run
 
 
   # Tech Stack ⚙️
@@ -43,7 +54,8 @@ ____________________________________
 
 1. **Worker Registration**  
    Workers can register with:
-   - Full Name  
+   - Full Name 
+   - username
    - Email  
    - Password (min 6 characters)  
    - Phone Number  
@@ -53,16 +65,28 @@ ____________________________________
 2. **Worker Login**  
    Employees input their password and email.  
    - Worker info is sent to the Profile screen upon success.  
+   - Ater login user redirected to Assigned Task screen.
    - For security, passwords are SHA1 hashed in the backend.
+
 
 3. **Profile Screen**  
    Shows full worker information including:  
    - Worker ID  
-   - Full Name  
+   - Full Name 
+   - username  
    - Email  
    - Phone Number  
    - Address  
-   Also includes buttons for **My Tasks** and **Logout**.
+   Also includes buttons for **Edit profile**.
+  
+   **Edit Profile Button**
+    Allows editing of:
+  - Full Name
+  - Email
+  - Phone
+  - Address
+   * **Username** remains locked (non-editable)
+   * Profile data saved to backend via `update_profile.php`
 
 4. **Assigned Task Screen**  
    Displays all tasks assigned to the logged-in worker.
@@ -81,51 +105,19 @@ ____________________________________
    - App auto-updates the task status to **Completed**
    - User is returned to the updated task list
 
+   6. **Submission History Screen**  
 
- # Screens Overview 🖼️
-_____________________________
+   - List of past submissions (task title, date, preview).
+   - User need to tap to edit any submission.
+   - Update previous text, confirm overwrite.
+   - Confirmation dialog will appear asking the user to confirm their update submission.
+   - Success update snackbar shown.
 
-### Registration Screen
-- **Fields:** Name, Email, Password, Phone, Address  
-- **Validations:** Required fields, valid email format, minimum 6-character password  
-- **Backend:** Sends data securely to PHP backend via HTTP POST
+   
+6. **Navigation**  
 
-###  Login Screen
-- **Fields:** Email, Password  
-- **Process:** On success, redirects to Profile Screen with full user data  
+   - Drawer Navigation Bar with 3 tabs , assigned task, submission history, my profile.
 
-###  Profile Screen
-- **Displays:** Full user details (ID, Name, Email, Phone, Address)  
-- **Actions:** Buttons for:
-  - 🗂️ *My Tasks*  
-  - 🚪 *Logout*
-
-### Task List Screen
-- **Displays:** Tasks assigned to the logged-in worker only  
-- **Card Contents:**  
-  - Title  
-  - Description  
-  - Due Date  
-  - **Color-coded status:**  
-    - 🟡 Pending  
-    - ✅ Completed  
-    - 🔴 Overdue  
-- **Action:** Tap a task to open the submission form
-
-### Submit Work Screen
-- **Prefilled Info:** Task title and description  
-- **Input Field:** Completion note from worker  
-- **Validation:** Ensures field is not empty  
-- **After Submission:**  
-  - Saves data to `tbl_submissions`  
-  - Updates task status to **Completed**  
-  - Returns to latest task list
-
-### Secure Authentication 
-- **Passwords:** SHA1-hashed before storing in database  
-- **Data:** Sent securely to backend via HTTP POST
-
----
 
 
 ##  Project Links 🔗
@@ -133,10 +125,3 @@ _____________________________
 ### GitHub Repository  
    [wtms-project (GitHub)](https://github.com/wnzimah/wtms-project.git)
 
-### YouTube Demonstration
-
-- **Phase 1 – User Registration & Login**  
-    (https://youtu.be/AoQuPAxQTx8?si=Up9A6HgSSvS5k2by)
-
-- **Phase 2 – Task Completion System**  
-    (https://youtu.be/1qvjaIUDGUI?si=y641ccvB0BTC1A5O)

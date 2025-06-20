@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:wtms/myconfig.dart';
-import 'package:wtms/view/loginscreen.dart';
+import '../myconfig.dart';
+import 'loginscreen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,18 +13,20 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController(); // NEW
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
-  static const Color mainColor = Color(0xFF8E0038); // Maroon
+  static const Color mainColor = Color(0xFF8E0038);
   static const Color gradientTop = Color(0xFFD81B60);
   static const Color gradientBottom = Color(0xFFF8EAF6);
 
   void registerWorker() async {
     String name = nameController.text.trim();
+    String username = usernameController.text.trim(); // NEW
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     String phone = phoneController.text.trim();
@@ -34,6 +36,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Uri.parse("${MyConfig.myurl}/wtms/wtms/php/register_worker.php"),
       body: {
         "full_name": name,
+        "username": username, // NEW
         "email": email,
         "password": password,
         "phone": phone,
@@ -59,13 +62,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void registerUserDialog() {
     String name = nameController.text.trim();
+    String username = usernameController.text.trim(); // NEW
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmPasswordController.text.trim();
     String phone = phoneController.text.trim();
     String address = addressController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty || phone.isEmpty || address.isEmpty) {
+    if (name.isEmpty || username.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty || phone.isEmpty || address.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all fields")),
       );
@@ -181,38 +185,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       children: [
                         buildTextField(nameController, "Full Name", Icons.person),
+                        buildTextField(usernameController, "Username", Icons.person_outline), // NEW
                         buildTextField(emailController, "Email", Icons.email, keyboard: TextInputType.emailAddress),
                         buildTextField(passwordController, "Password", Icons.lock, obscure: true),
                         buildTextField(confirmPasswordController, "Confirm Password", Icons.lock_outline, obscure: true),
                         buildTextField(phoneController, "Phone Number", Icons.phone, keyboard: TextInputType.phone),
                         buildTextField(addressController, "Address", Icons.home, maxLines: 2),
                         const SizedBox(height: 12),
-
-                        // Styled Register Button (same as Login style)
                         SizedBox(
                           width: 140,
                           height: 44,
                           child: ElevatedButton.icon(
                             onPressed: registerUserDialog,
                             icon: const Icon(Icons.check, size: 18, color: Colors.white),
-                            label: const Text(
-                              "Register",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
+                            label: const Text("Register", style: TextStyle(fontSize: 14, color: Colors.white)),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: mainColor,
                               elevation: 5,
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 10),
                         GestureDetector(
                           onTap: () {

@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../model/worker.dart';
 import '../myconfig.dart';
-import 'profilescreen.dart';
 import 'registerscreen.dart';
+import 'mainscreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,28 +47,11 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/wtms.png",
-                  height: 100, // logo kecil
-                  fit: BoxFit.contain,
-                ),
+                Image.asset("assets/images/wtms.png", height: 100),
                 const SizedBox(height: 8),
-                const Text(
-                  "Welcome Back!",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                const Text("Welcome Back!", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white)),
                 const SizedBox(height: 6),
-                const Text(
-                  "Login to keep manage your task",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                ),
+                const Text("Login to keep manage your task", style: TextStyle(fontSize: 14, color: Colors.white70)),
                 const SizedBox(height: 20),
                 buildLoginCard(),
               ],
@@ -88,18 +71,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         child: Column(
           children: [
-            buildTextField(
-              controller: emailController,
-              label: "Email Address",
-              icon: Icons.email_outlined,
-            ),
+            buildTextField(emailController, "Email Address", Icons.email_outlined),
             const SizedBox(height: 16),
-            buildTextField(
-              controller: passwordController,
-              label: "Password",
-              icon: Icons.lock_outline,
-              obscure: true,
-            ),
+            buildTextField(passwordController, "Password", Icons.lock_outline, obscure: true),
             const SizedBox(height: 12),
             buildRememberMe(),
             const SizedBox(height: 20),
@@ -112,21 +86,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    bool obscure = false,
-  }) {
+  Widget buildTextField(TextEditingController controller, String label, IconData icon, {bool obscure = false}) {
     return TextField(
       controller: controller,
       obscureText: obscure,
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: mainColor),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         filled: true,
         fillColor: Colors.white,
       ),
@@ -140,11 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
           value: isChecked,
           onChanged: (value) {
             setState(() => isChecked = value!);
-            storeCredentials(
-              emailController.text,
-              passwordController.text,
-              isChecked,
-            );
+            storeCredentials(emailController.text, passwordController.text, isChecked);
           },
           activeColor: mainColor,
         ),
@@ -164,8 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: mainColor,
           padding: const EdgeInsets.symmetric(vertical: 14),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          elevation: 5,
-          shadowColor: Colors.black45,
         ),
       ),
     );
@@ -175,30 +136,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            // TODO: Add Forgot Password navigation
-          },
-          child: const Text(
-            "Forgot Password?",
-            style: TextStyle(color: Colors.blue),
-          ),
+          onTap: () {},
+          child: const Text("Forgot Password?", style: TextStyle(color: Colors.blue)),
         ),
         const SizedBox(height: 10),
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const RegisterScreen()),
-            );
-          },
-          child: const Text(
-            "New user? Register →",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-              decoration: TextDecoration.underline,
-            ),
-          ),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+          child: const Text("New user? Register →", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, decoration: TextDecoration.underline)),
         ),
       ],
     );
@@ -216,10 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       var response = await http.post(
         Uri.parse("${MyConfig.myurl}/wtms/wtms/php/login_worker.php"),
-        body: {
-          "email": email,
-          "password": password,
-        },
+        body: {"email": email, "password": password},
       );
 
       if (response.statusCode == 200) {
@@ -229,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
           showMessage("Welcome ${worker.workerName}");
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => ProfileScreen(worker: worker)),
+            MaterialPageRoute(builder: (_) => MainScreen(worker: worker)),
           );
         } else {
           showMessage("Login failed. Please check your email/password.", isError: true);
@@ -244,10 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void showMessage(String msg, {bool isError = false}) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: isError ? Colors.red : const Color.fromARGB(255, 175, 78, 76),
-      ),
+      SnackBar(content: Text(msg), backgroundColor: isError ? Colors.red : mainColor),
     );
   }
 
@@ -255,11 +193,11 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (isChecked) {
       await prefs.setString('email', email);
-      await prefs.setString('pass', password);
+      await prefs.setString('password', password);
       await prefs.setBool('remember', true);
     } else {
       await prefs.remove('email');
-      await prefs.remove('pass');
+      await prefs.remove('password');
       await prefs.remove('remember');
     }
   }
@@ -268,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       emailController.text = prefs.getString('email') ?? "";
-      passwordController.text = prefs.getString('pass') ?? "";
+      passwordController.text = prefs.getString('password') ?? "";
       isChecked = prefs.getBool('remember') ?? false;
     });
   }

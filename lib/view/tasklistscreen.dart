@@ -66,21 +66,11 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color themeColor = Color(0xFF8E0038); // Maroon
     const Color backgroundColor = Color(0xFFFFF0F2); // Light rose
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: AppBar(
-        backgroundColor: themeColor,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          "Assigned Tasks",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-      ),
-      body: isLoading
+    return Container(
+      color: backgroundColor,
+      child: isLoading
           ? const Center(child: CircularProgressIndicator())
           : taskList.isEmpty
               ? const Center(
