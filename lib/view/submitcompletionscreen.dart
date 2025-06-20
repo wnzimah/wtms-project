@@ -87,23 +87,52 @@ class _SubmitCompletionScreenState extends State<SubmitCompletionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ==== Task Title ====
-            Text(
-              widget.work.title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+            // === Task Details Card ===
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Task Details",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.work.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.work.description,
+                    style: const TextStyle(fontSize: 14, color: Colors.black54),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              widget.work.description,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
-            ),
-            const SizedBox(height: 20),
 
-            // ==== Section Box ====
+            // === Submission Card ===
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -154,40 +183,44 @@ class _SubmitCompletionScreenState extends State<SubmitCompletionScreen> {
                           decoration: InputDecoration(
                             hintText: "Describe your completed work...",
                             filled: true,
-                            fillColor: Colors.grey[100],
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.purple),
                             ),
                             contentPadding: const EdgeInsets.all(14),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 46,
-                          child: ElevatedButton.icon(
-                            onPressed: _isSubmitting ? null : _submitWork,
-                            icon: const Icon(Icons.send, color: Colors.white),
-                            label: Text(
-                              _isSubmitting ? "Submitting..." : "Submit",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: themeColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              elevation: 4,
-                            ),
                           ),
                         ),
                       ],
                     ),
             ),
+
+            const SizedBox(height: 24),
+
+            // === Submit Button ===
+            if (!isCompleted)
+              SizedBox(
+                width: double.infinity,
+                height: 46,
+                child: ElevatedButton.icon(
+                  onPressed: _isSubmitting ? null : _submitWork,
+                  icon: const Icon(Icons.send, color: Colors.white),
+                  label: Text(
+                    _isSubmitting ? "Submitting..." : "Submit",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: themeColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    elevation: 4,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
