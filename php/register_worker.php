@@ -4,51 +4,68 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    sendJsonResponse(['status' => 'failed', 'data' => 'Invalid request method']);
+    sendJson(['status' => 'failed', 'data' => 'Invalid request method']);
     exit;
 }
 
-include_once("dbconnect.php");
+include_once "dbconnect.php";
 
-$name = trim($_POST['full_name']);
-$email = trim($_POST['email']);
-$password = trim($_POST['password']);
-$phone = trim($_POST['phone']);
-$address = trim($_POST['address']);
+/* ─── Ambil dan trim input ─── */
+$full_name = trim($_POST['full_name'] ?? '');
+$username  = trim($_POST['username']  ?? '');
+$email     = trim($_POST['email']     ?? '');
+$password  = trim($_POST['password']  ?? '');
+$phone     = trim($_POST['phone']     ?? '');
+$address   = trim($_POST['address']   ?? '');
 
-if (empty($name) || empty($email) || empty($password) || empty($phone) || empty($address)) {
-    sendJsonResponse(['status' => 'failed', 'data' => 'Missing required fields']);
+/* ─── Semakan asas ─── */
+if (!$full_name || !$username || !$email || !$password || !$phone || !$address) {
+    sendJson(['status' => 'failed', 'data' => 'Missing required fields']);
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    sendJsonResponse(['status' => 'failed', 'data' => 'Invalid email format']);
+    sendJson(['status' => 'failed', 'data' => 'Invalid email format']);
     exit;
 }
 
 if (strlen($password) < 6) {
-    sendJsonResponse(['status' => 'failed', 'data' => 'Password must be at least 6 characters']);
+    sendJson(['status' => 'failed', 'data' => 'Password must be at least 6 characters']);
     exit;
 }
 
-// Hash with SHA1 (per assignment requirement)
-$hashed_password = sha1($password);
+/* ─── Pastikan username & email unik ─── */
+$dupStmt = $conn->prepare("SELECT id FROM workers WHERE username = ? OR email = ? LIMIT 1");
+$dupStmt->bind_param("ss", $username, $email);
+$dupStmt->execute();
+$dupStmt->store_result();
 
-$sql = "INSERT INTO workers (full_name, email, password, phone, address) VALUES (?, ?, ?, ?, ?)";
+if ($dupStmt->num_rows > 0) {
+    $dupStmt->close();
+    sendJson(['status' => 'failed', 'data' => 'Username or email already taken']);
+    exit;
+}
+$dupStmt->close();
+
+/* ─── Hash password (SHA‑1 mengikut keperluan tugasan) ─── */
+$hashed = sha1($password);
+
+/* ─── Insert ─── */
+$sql  = "INSERT INTO workers (full_name, username, email, password, phone, address)
+         VALUES (?,?,?,?,?,?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssss", $name, $email, $hashed_password, $phone, $address);
+$stmt->bind_param("ssssss", $full_name, $username, $email, $hashed, $phone, $address);
 
 if ($stmt->execute()) {
-    sendJsonResponse(['status' => 'success', 'data' => null]);
+    sendJson(['status' => 'success', 'data' => null]);
 } else {
-    sendJsonResponse(['status' => 'failed', 'data' => $stmt->error]);
+    // Contoh kesilapan: duplicate key dari constraint UNIQUE
+    sendJson(['status' => 'failed', 'data' => $stmt->error]);
 }
 
 $stmt->close();
 $conn->close();
 
-function sendJsonResponse($array)
-{
-    echo json_encode($array);
-}
+/* ─── Helper ─── */
+function sendJson($arr) { echo json_encode($arr); }
 ?>
